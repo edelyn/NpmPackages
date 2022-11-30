@@ -1,0 +1,38 @@
+{
+  "name": "@nait-aits/azureadhelpers",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edelyn/NpmPackages.git"
+  },
+  "description": "A library to make working with Azure AD easier",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "del dist && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs"
+  },
+  "author": "NAIT ITS",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "^2.32.0",
+    "@azure/msal-react": "^1.5.0",
+    "@nait-aits/usestateloader": "^0.0.2",
+    "typescript": "^4.9.3"
+  }
+}
