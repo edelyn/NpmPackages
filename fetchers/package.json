@@ -1,6 +1,6 @@
 {
   "name": "@nait-aits/usestateloader",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/edelyn/NpmPackages.git"
@@ -19,17 +19,15 @@
   "author": "NAIT ITS",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^18.11.9",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "typescript": "^4.9.3"
   },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  },
-  "dependencies": {
-    "@types/node": "^18.11.9",
-    "typescript": "^4.9.3"
   }
 }

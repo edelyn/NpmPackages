@@ -1,7 +1,7 @@
 import { StateItem, useStateLoader } from "@nait-aits/usestateloader";
-import { getToken } from "helpers";
+import { getToken } from "../helpers/getToken";
 
-function useStateLoaderAuthenticated<T>(
+export function useStateLoaderAuthenticated<T>(
   options: {
     url: string;
     postData?: any;

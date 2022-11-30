@@ -1,4 +1,4 @@
-import { msalInstance } from "MSAL/instance";
+import { msalInstance } from "../MSAL/instance";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { FetchError } from "@nait-aits/usestateloader";
 
