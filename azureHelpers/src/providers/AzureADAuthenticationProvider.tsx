@@ -1,6 +1,6 @@
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
-import { loadMsalConfig, MsalConfig } from "./loadMsalConfig";
+import { loadMsalConfig, MsalConfig } from "../helpers/loadMsalConfig";
 import React, { createContext } from "react";
 
 export const AzureADScopeContext = createContext<string[] | undefined>(
@@ -41,3 +41,5 @@ export function AzureADAuthenticationProvider(props: {
     </MsalProvider>
   );
 }
+
+export default AzureADAuthenticationProvider;

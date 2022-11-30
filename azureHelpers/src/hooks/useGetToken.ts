@@ -1,6 +1,6 @@
 import { useMsal } from "@azure/msal-react";
-import { FetchError } from "@nait-aits/usestateloader";
 import { useContext } from "react";
+import { FetchError } from "../components/fetcher";
 
 import { AzureADScopeContext } from "../providers/AzureADAuthenticationProvider";
 

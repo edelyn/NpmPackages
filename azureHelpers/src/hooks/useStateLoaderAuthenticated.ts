@@ -1,5 +1,6 @@
-import { StateItem, useStateLoader } from "@nait-aits/usestateloader";
+import { StateItem } from "../components/fetchState";
 import useGetToken from "./useGetToken";
+import useStateLoader from "./useStateLoader";
 
 export function useStateLoaderAuthenticated<T>(
   options: {

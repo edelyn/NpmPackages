@@ -1,5 +1,0 @@
-
-> @nait-aits/azureadhelpers@0.0.6 build
-> del dist && npm run build:esm && npm run build:cjs "pack"
-
-C:\tfs\GithubNPMPackages\NpmPackages\azureAdHelpers\dist\*, Are you sure (Y/N)? 
