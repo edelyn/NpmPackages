@@ -1,6 +1,6 @@
 {
-  "name": "@nait-aits/azure-ad-auth-helpers",
-  "version": "0.0.9",
+  "name": "@nait-aits/azure-ad-auth",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/edelyn/NpmPackages.git"
