@@ -1,6 +1,6 @@
 {
   "name": "@nait-aits/signalr",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/edelyn/NpmPackages.git"
@@ -14,6 +14,7 @@
   "scripts": {
     "build": "del /Q dist && del *.tgz && npm run build:esm && npm run build:cjs",
     "pack": "npm run build & npm pack",
+    "publisher": "npm run build & npm publish --access=public",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs"
   },

@@ -1,6 +1,6 @@
 {
-  "name": "@nait-aits/fetch-hooks",
-  "version": "0.0.4",
+  "name": "@nait-aits/azure-ad-auth",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/edelyn/NpmPackages.git"
@@ -14,6 +14,7 @@
   "scripts": {
     "build": "del /Q dist && del *.tgz && npm run build:esm && npm run build:cjs",
     "pack": "npm run build & npm pack",
+    "publisher": "npm run build & npm publish --access=public",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs"
   },
@@ -28,6 +29,8 @@
     "typescript": "^4.9.3"
   },
   "peerDependencies": {
+    "@azure/msal-browser": "^2.30.0",
+    "@azure/msal-react": "^1.5.0",
     "react": "^17 || ^18",
     "react-dom": "^17 || ^18"
   }
