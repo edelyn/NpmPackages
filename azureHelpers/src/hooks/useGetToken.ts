@@ -1,8 +1,8 @@
 import { useMsal } from "@azure/msal-react";
 import { useContext } from "react";
-import { FetchError } from "../components/fetcher";
 
 import { AzureADScopeContext } from "../providers/AzureADAuthenticationProvider";
+import { FetchError } from "../types/Types";
 
 export function useGetToken() {
   var scopeContext = useContext(AzureADScopeContext);

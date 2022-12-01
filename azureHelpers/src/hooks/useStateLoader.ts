@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AuthTokenLoader } from "../components/fetcher";
-import { loadState, StateItem } from "../components/fetchState";
+import { AuthTokenLoader, FetchError, StateItem } from "../types/Types";
+import { useLoadState } from "./useLoadState";
 
 export function useStateLoader<T>(
   options: {
@@ -10,15 +10,11 @@ export function useStateLoader<T>(
     getAuthToken?: AuthTokenLoader;
     method?: "GET" | "POST" | "PUT" | "DELETE";
   },
-  onChange?: (event: "start" | "end" | "error", data: StateItem<T>) => void
+  onChange?: (event: "start" | "end" | "error", data: T | FetchError) => void
 ) {
   const [data, setData] = useState<StateItem<T>>({ loading: false });
 
-  const loader = () => {
-    loadState<T>(options, setData, onChange);
-  };
-
-  return [data, loader] as const;
+  return [data, useLoadState<T>(options, setData, onChange)] as const;
 }
 
 export default useStateLoader;

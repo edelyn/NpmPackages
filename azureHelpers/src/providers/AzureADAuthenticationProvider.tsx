@@ -9,13 +9,12 @@ export const AzureADScopeContext = createContext<string[] | undefined>(
 
 export function AzureADAuthenticationProvider(props: {
   children: React.ReactNode | React.ReactNode[];
-  config?: MsalConfig;
-  defaultScopes?: string[];
+  config?: MsalConfig & { defaultScopes?: string[] };
 }) {
-  const { children, defaultScopes, config = {} } = props;
+  const { children, config = {} } = props;
 
-  var envScopes: string[] | undefined = process.env.REACT_APP_SCOPES
-    ? process.env.REACT_APP_SCOPES.split(",")
+  var envScopes: string[] | undefined = process.env.REACT_APP_AZUREAD_SCOPES_CSV
+    ? process.env.REACT_APP_AZUREAD_SCOPES_CSV.split(",")
     : undefined;
 
   var defaultConfig: MsalConfig = {
@@ -35,7 +34,7 @@ export function AzureADAuthenticationProvider(props: {
 
   return (
     <MsalProvider instance={msalInstance}>
-      <AzureADScopeContext.Provider value={defaultScopes || envScopes}>
+      <AzureADScopeContext.Provider value={config.defaultScopes || envScopes}>
         {children}
       </AzureADScopeContext.Provider>
     </MsalProvider>

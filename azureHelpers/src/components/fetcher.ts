@@ -1,37 +1,14 @@
-export class FetchError {
-  constructor(
-    message: string,
-    errorCode?: number | string,
-    status?: number | string
-  ) {
-    this.message = message;
-    this.errorCode = errorCode;
-    this.status = status;
-  }
-
-  message: string;
-  errorCode?: number | string;
-  status?: number | string;
-}
-
-export type AuthTokenLoader = () => Promise<{ token: string } | FetchError>;
+import { AuthTokenLoader, FetchError } from "../types/Types";
 
 export function fetcher<U>(props: {
   url: string;
   data?: any;
-  excludeBaseUrl?: boolean;
+  baseUrl?: string;
   method?: "GET" | "POST" | "PUT" | "DELETE";
   onChange?: (event: "start" | "end" | "error", data?: U | FetchError) => void;
   getAuthToken?: AuthTokenLoader;
 }) {
-  const {
-    url,
-    data,
-    excludeBaseUrl,
-    method = "post",
-    onChange,
-    getAuthToken,
-  } = props;
+  const { url, data, baseUrl, method = "post", onChange, getAuthToken } = props;
 
   function performFetch(token?: string) {
     if (getAuthToken && !token) {
@@ -51,12 +28,7 @@ export function fetcher<U>(props: {
 
     onChange?.("start");
 
-    fetch(
-      excludeBaseUrl || !process.env.REACT_APP_API_BASE
-        ? url
-        : `${process.env.REACT_APP_API_BASE}/${url}`,
-      fetchParams
-    )
+    fetch(!baseUrl ? url : `${baseUrl}/${url}`, fetchParams)
       .then((response) => {
         const contentType = response.headers.get("content-type");
 
@@ -89,3 +61,5 @@ export function fetcher<U>(props: {
       });
   }
 }
+
+export default fetcher;

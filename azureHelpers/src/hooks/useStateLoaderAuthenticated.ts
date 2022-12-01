@@ -1,4 +1,4 @@
-import { StateItem } from "../components/fetchState";
+import { FetchError } from "../types/Types";
 import useGetToken from "./useGetToken";
 import useStateLoader from "./useStateLoader";
 
@@ -9,7 +9,7 @@ export function useStateLoaderAuthenticated<T>(
     excludeBaseUrl?: boolean;
     method?: "GET" | "POST" | "PUT" | "DELETE";
   },
-  onChange?: (event: "start" | "end" | "error", data: StateItem<T>) => void
+  onChange?: (event: "start" | "end" | "error", data: T | FetchError) => void
 ) {
   const getAuthToken = useGetToken();
 
