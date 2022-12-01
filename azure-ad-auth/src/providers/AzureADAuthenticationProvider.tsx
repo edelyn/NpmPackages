@@ -19,7 +19,12 @@ export function AzureADAuthenticationProvider(props: {
 
   var defaultConfig: MsalConfig = {
     clientId: `${process.env.REACT_APP_AZUREAD_CLIENTID}`,
-    tenantId: `${process.env.REACT_APP_AZUREAD_AUTHORITY}`,
+    tenantId: `${
+      process.env.REACT_APP_AZUREAD_TENANTID
+        ? "https://login.microsoftonline.com/" +
+          process.env.REACT_APP_AZUREAD_TENANTID
+        : ""
+    }`,
     redirectUri: `${window.location.origin}/`,
     maxLogLevel: 0,
     cacheOptions: {
