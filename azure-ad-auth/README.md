@@ -15,6 +15,11 @@ npm install @nait-aits/azure-ad-auth
 - @azure/msal-browser
 - @azure/msal-react
 
+## Hooks and Providers
+
+- [NaitAzureADAuthProvider](#naitazureadauthprovider)
+- [useGetToken](#usegettoken)
+
 ## Setup
 
 To make setup simpler, you can use .env variables.

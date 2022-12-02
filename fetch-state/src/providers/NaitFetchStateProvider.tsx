@@ -1,6 +1,14 @@
 import React, { createContext } from "react";
 import { AuthTokenLoader } from "../types/Types";
 
+type NaitFetchStateProviderConfig = {
+  baseUrl?: string;
+  defaultMethod?: "GET" | "POST" | "PUT" | "DELETE";
+  authenticationRequired?: boolean;
+  getAuthToken?: () => AuthTokenLoader;
+  debug?: boolean;
+};
+
 const StateLoaderConfigurationContext = createContext<
   | {
       baseUrl?: string;
@@ -13,13 +21,7 @@ const StateLoaderConfigurationContext = createContext<
 
 function NaitFetchStateProvider(props: {
   children: React.ReactNode | React.ReactNode[];
-  options?: {
-    baseUrl?: string;
-    defaultMethod?: "GET" | "POST" | "PUT" | "DELETE";
-    authenticationRequired?: boolean;
-    getAuthToken?: () => AuthTokenLoader;
-    debug?: boolean;
-  };
+  config?: NaitFetchStateProviderConfig;
 }) {
   const {
     baseUrl,
@@ -27,7 +29,7 @@ function NaitFetchStateProvider(props: {
     authenticationRequired,
     getAuthToken,
     debug,
-  } = props.options || {};
+  } = props.config || {};
 
   return (
     <StateLoaderConfigurationContext.Provider

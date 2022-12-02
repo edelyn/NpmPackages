@@ -10,7 +10,10 @@ npm install @nait-aits/fetch-state
 
 ## Hooks and Providers
 
-- []
+- [NaitFetchStateProvider](#naitfetchstateprovider)
+- [useStateLoader](#usestateloader)
+- [useLoadState](#useloadstate)
+- [useEftcher](#usefetcher)
 
 ## Setup
 
@@ -26,7 +29,7 @@ REACT_APP_API_BASE_URL=URL
 
 ## NaitFetchStateProvider
 
-You will need to wrap your application (or specific components) in a NaitFetchStateProvider if you want to use the .env variables, or set app/component default values.
+You can wrap your application (or specific components) in a NaitFetchStateProvider if you want to use the .env variables, or set app/component default values. If you don't, you won't be able to globally override default settings (baseUrl, getAuthToken, etc). You can still use these items, but they will need to be specified each call.
 
 ### App.ts (or app/component entry point)
 
@@ -46,7 +49,7 @@ function App() {
 
 ### NaitFetchStateProvider config (optional)
 
-If you have any overrides (or or not using an .env file), you can specify the configuration here as well. For example, you can set all endpoint calls to be POST and require authentication by default.
+If you have any overrides other than the base url (or or not using an .env file), you can specify the configuration defaults here as well. For example, you can set all endpoint calls to be POST and require authentication by default.
 
 You only need to specify the items you are overriding/need.
 
@@ -54,7 +57,7 @@ For example:
 
 ```tsx
 <NaitFetchStateProvider
-  options={{
+  config={{
     defaultMethod: "GET",
     authenticationRequired: true,
   }}
@@ -63,13 +66,21 @@ For example:
 </NaitFetchStateProvider>
 ```
 
+### Configuration Defaults
+
+- baseUrl: undefined;
+- defaultMethod: "POST";
+- authenticationRequired: false;
+- debug: false;
+- getAuthToken: undefined;
+
 ### Authorization Tokens
 
 If your application required Auth Bearere tokens, you can set the default get token hook here. Anytime a request that requires authentication is called, this hook will be called to get the token and append it to the header.
 
 ```tsx
 <NaitFetchStateProvider
-  options={{
+  config={{
     getAuthToken: useTokenHook,
   }}
 >
@@ -92,7 +103,7 @@ function App() {
   return (
     <NaitAzureADAuthProvider>
       <NaitFetchStateProvider
-        options={{
+        config={{
           getAuthToken: useGetToken,
         }}
       >
