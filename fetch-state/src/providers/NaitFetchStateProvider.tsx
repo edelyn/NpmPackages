@@ -42,7 +42,7 @@ function NaitFetchStateProvider(props: {
     >
       {debug && (
         <div>
-          <h3>StateLoaderConfigurationContext</h3>
+          <h3>NaitFetchStateProvider Config</h3>
           <p>baseUrl: {baseUrl || process.env.REACT_APP_API_BASE_URL}</p>
           <p>defaultMethod: {defaultMethod}</p>
           <p>authenticationRequired: {authenticationRequired?.toString()}</p>

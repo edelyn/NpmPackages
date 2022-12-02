@@ -42,7 +42,7 @@ export function NaitAzureADAuthProvider(props: {
       <AzureADScopeContext.Provider value={config.defaultScopes || envScopes}>
         {config?.debug && (
           <div>
-            <h3>MsalProvider Options</h3>
+            <h3>NaitAzureADAuthProvider Config</h3>
             <p>
               <b>clientId:</b> {fullConfig.clientId}
             </p>

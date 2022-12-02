@@ -11,9 +11,6 @@ export function useGetToken() {
   var caller = () => {
     var scopes: string[] = scopeContext ?? [];
 
-    console.log("scopes", scopes);
-    
-
     var userAccount = instance.getAllAccounts()[0];
 
     var authValue = instance
