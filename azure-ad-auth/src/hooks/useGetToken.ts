@@ -1,7 +1,7 @@
 import { useMsal } from "@azure/msal-react";
 import { useContext } from "react";
 
-import { AzureADScopeContext } from "../providers/AzureADAuthenticationProvider";
+import { AzureADScopeContext } from "../providers/NaitAzureADAuthProvider";
 import { FetchError } from "../types/Types";
 
 export function useGetToken() {
@@ -10,6 +10,9 @@ export function useGetToken() {
 
   var caller = () => {
     var scopes: string[] = scopeContext ?? [];
+
+    console.log("scopes", scopes);
+    
 
     var userAccount = instance.getAllAccounts()[0];
 

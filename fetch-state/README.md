@@ -1,10 +1,288 @@
-# React Helpers
-Simple NPM Packages to make development setup easier and hopefully end up with cleaner code.
+# fetch-state
 
-## Contents
+These items are intended to make working with state loaded from http endpoints quicker to create and easier to work with.
 
-* azure-ad-helpers
-* fetch-state
-* signalr
+## Installation
 
+```bash
+npm install @nait-aits/fetch-state
+```
 
+## Hooks and Providers
+
+- []
+
+## Setup
+
+To make setup simpler, you can use .env variables.
+
+### Supported .env Variables
+
+The base URL will be appended to any call (unless specified not to). This means you wont need to add your server name to every call.
+
+```
+REACT_APP_API_BASE_URL=URL
+```
+
+## NaitFetchStateProvider
+
+You will need to wrap your application (or specific components) in a NaitFetchStateProvider if you want to use the .env variables, or set app/component default values.
+
+### App.ts (or app/component entry point)
+
+This will by default use the values you entered in the .env file.
+
+```tsx
+import { NaitFetchStateProvider } from "@nait-aits/fetch-state";
+
+function App() {
+  return (
+    <NaitFetchStateProvider>
+      <Control />
+    </NaitFetchStateProvider>
+  );
+}
+```
+
+### NaitFetchStateProvider config (optional)
+
+If you have any overrides (or or not using an .env file), you can specify the configuration here as well. For example, you can set all endpoint calls to be POST and require authentication by default.
+
+You only need to specify the items you are overriding/need.
+
+For example:
+
+```tsx
+<NaitFetchStateProvider
+  options={{
+    defaultMethod: "GET",
+    authenticationRequired: true,
+  }}
+>
+  <Control />
+</NaitFetchStateProvider>
+```
+
+### Authorization Tokens
+
+If your application required Auth Bearere tokens, you can set the default get token hook here. Anytime a request that requires authentication is called, this hook will be called to get the token and append it to the header.
+
+```tsx
+<NaitFetchStateProvider
+  options={{
+    getAuthToken: useTokenHook,
+  }}
+>
+  <Control />
+</NaitFetchStateProvider>
+```
+
+### Integration with @nait-aits\azure-ad-auth
+
+if you are using the package [@nait-aits\azure-ad-auth](../azure-ad-auth/README.md), you can easily tap into the `useGetToken` hook and all auth is take care of for you (provided it is azure ad auth)
+
+```tsx
+import "./App.css";
+import TestAuth from "./TestAuth";
+import { NaitAzureADAuthProvider, useGetToken } from "@nait-aits/azure-ad-auth";
+
+import { NaitFetchStateProvider } from "@nait-aits/fetch-state";
+
+function App() {
+  return (
+    <NaitAzureADAuthProvider>
+      <NaitFetchStateProvider
+        options={{
+          getAuthToken: useGetToken,
+        }}
+      >
+        <TestAuth />
+      </NaitFetchStateProvider>
+    </NaitAzureADAuthProvider>
+  );
+}
+
+export default App;
+```
+
+### Debug
+
+If you are having issues, you can enable the debug panel by setting the debug value to true. This will output a div that contains the values that the provider is using.
+
+## useStateLoader
+
+This hook is used to call get data from an endpoint, while tracking its status (start, end, error). It has a generic type, that specifies what type the data being returned is.
+
+```tsx
+var [state, loadState, setState] = useStateLoader<ReturnType>({
+  url: "someUrl",
+});
+```
+
+It returns an array that contains the data state (of type `StateItem<T>`), the method load the data (loading does not happen automatically), and a setter in case you want to update the state yourself (not required, but may be useful).
+
+Unless otherwise specified, the baseUrl above will prepend the url. The only required parameter is the url.
+
+### Usage
+
+Here is a simple page that uses this hook.
+
+```tsx
+import { useStateLoader } from "@nait-aits/fetch-state";
+import { useEffect } from "react";
+
+type Product = { name: string; id: number };
+export function SamplePage() {
+  //note: setProducts is shown here for demonstration purposes only.
+  var [products, loadProducts, setProducts] = useStateLoader<Product[]>({
+    url: `Products/GetAllProducts`,
+    method: "GET",
+  });
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  return (
+    <div>
+      {products.loading && <div>Loading...</div>}
+      {products.error && <div>Error: {products.error?.message}</div>}
+      {products.data && (
+        <div>
+          {products.data.map((product) => (
+            <div key={product.id}>{product.name}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## useLoadState
+
+If, for whatever reason, you want to manage the start yourself, you can use useLoadState.
+
+It is similar to useStateLoader, but you sepcify the setter. The state must be of type `StateItem<T>`.
+
+It returns the method load the data. The only required parameter is the url.
+
+```tsx
+
+var [data, setData] = useState<StateItem<ReturnType>>();
+
+var loadData = useLoadState<ReturnType>({
+  url: "someUrl",
+}, setData);
+
+...
+
+loadData();
+```
+
+### Usage
+
+Here is a simple page that uses this hook.
+
+```tsx
+import { StateItem, useLoadState } from "@nait-aits/fetch-state";
+import { useEffect, useState } from "react";
+
+type Product = { name: string; id: number };
+
+export function SamplePage() {
+  var [products, setProducts] = useState<StateItem<Product[]> | undefined>(
+    undefined
+  );
+
+  var loadProducts = useLoadState<Product[]>(
+    {
+      url: `Products/GetAllProducts`,
+    },
+    setProducts,
+    (event, data) => {
+      //here you can do something with the event and data
+      if (event === "end") {
+        //do something
+      }
+    }
+  );
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  return (
+    <div>
+      {products?.loading && <div>Loading...</div>}
+      {products?.error && <div>Error: {products?.error?.message}</div>}
+      {products?.data && (
+        <div>
+          {products.data.map((product) => (
+            <div key={product.id}>{product.name}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## useFetcher
+
+While the first two are useful for state based operations, there are many times you want to make one off calls, and you only care it they were processed or not (i.e. deleting a record). That is where the useFetcher hook comes into play. It allows you to call an endpoint, and then do something with its result (or not, your call).
+
+It is a simple hook to instantiate, requiring no parameters, and returns a fetch function you can call to access an endpoint.
+
+The only required parameter is the url, but in order to know its result, you will need to tap into the onChange parameter.
+
+```tsx
+var fetcher = useFetcher();
+...
+fetcher.fetch<ReturnType>({
+    url: someUrl,
+    onChange: (event,data)=>{
+        if(event === "end"){
+            //do something (or not)
+        }
+    }
+});
+```
+
+You can use the same fetcher multiple times, it is not tied to a single state/endpoint.
+
+### Usage
+
+Here is a simple page that uses this hook.
+
+```tsx
+import { FetchError, useFetcher } from "@nait-aits/fetch-state";
+import { useState } from "react";
+
+type Product = { name: string; id: number };
+
+export function SamplePage() {
+  var fetcher = useFetcher();
+  var [products, setProducts] = useState<Product[] | undefined>();
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          fetcher.fetch<Product[]>({
+            url: "Products/GetAllProducts",
+            onChange: (event, data) => {
+              //need to also make sure it isnt an error object
+              if (event === "end" && !(data instanceof FetchError)) {
+                setProducts(data);
+              }
+            },
+          });
+        }}
+      >
+        Load
+      </button>
+    </div>
+  );
+}
+```

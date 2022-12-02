@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/edelyn/NpmPackages.git"
   },
-  "description": "A library to make working with Azure AD authentication easier",
+  "description": "A library to make loading data, and assigning it to states easier.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "files": [

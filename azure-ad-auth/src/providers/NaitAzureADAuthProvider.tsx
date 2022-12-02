@@ -7,9 +7,9 @@ export const AzureADScopeContext = createContext<string[] | undefined>(
   undefined
 );
 
-export function AzureADAuthenticationProvider(props: {
+export function NaitAzureADAuthProvider(props: {
   children: React.ReactNode | React.ReactNode[];
-  config?: MsalConfig & { defaultScopes?: string[] };
+  config?: MsalConfig & { defaultScopes?: string[]; debug?: boolean };
 }) {
   const { children, config = {} } = props;
 
@@ -33,17 +33,45 @@ export function AzureADAuthenticationProvider(props: {
     },
   };
 
-  const msalInstance = new PublicClientApplication(
-    loadMsalConfig({ ...defaultConfig, ...config })
-  );
+  var fullConfig = { ...defaultConfig, ...config };
+
+  const msalInstance = new PublicClientApplication(loadMsalConfig(fullConfig));
 
   return (
     <MsalProvider instance={msalInstance}>
       <AzureADScopeContext.Provider value={config.defaultScopes || envScopes}>
+        {config?.debug && (
+          <div>
+            <h3>MsalProvider Options</h3>
+            <p>
+              <b>clientId:</b> {fullConfig.clientId}
+            </p>
+            <p>
+              <b>tenantId:</b> {fullConfig.tenantId}
+            </p>
+            <p>
+              <b>redirectUri:</b> {fullConfig.redirectUri}
+            </p>
+            <p>
+              <b>scopes:</b> {envScopes?.join(",")}
+            </p>
+            <p>
+              <b>maxLogLevel: </b> {fullConfig.maxLogLevel}
+            </p>
+            <p>
+              <b>cacheLocation:</b> {fullConfig.cacheOptions?.cacheLocation} -{" "}
+              {config.cacheOptions?.storeAuthStateInCookie?.toString()}
+            </p>
+            <p>
+              <b>storeAuthStateInCookie:</b>{" "}
+              {fullConfig.cacheOptions?.storeAuthStateInCookie?.toString()}
+            </p>
+          </div>
+        )}
         {children}
       </AzureADScopeContext.Provider>
     </MsalProvider>
   );
 }
 
-export default AzureADAuthenticationProvider;
+export default NaitAzureADAuthProvider;

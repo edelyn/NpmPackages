@@ -13,10 +13,10 @@ export function useLoadState<T>(
   setData: (data: StateItem<T>) => void,
   onChange?: (event: "start" | "end" | "error", data: T | FetchError) => void
 ) {
-  var fetcher = useFetcher<T>();
+  var fetcher = useFetcher();
 
   var caller = () => {
-    return fetcher({
+    return fetcher.fetch<T>({
       ...options,
       onChange: (event, data) => {
         if (event === "start") {

@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { fetcher } from "../components/fetcher";
-import { StateLoaderConfigurationContext } from "../providers/StateLoaderConfigurationProvider";
+import { StateLoaderConfigurationContext } from "../providers/NaitFetchStateProvider";
 import { AuthTokenLoader, FetchError } from "../types/Types";
 
-export function useFetcher<T>() {
+export function useFetcher() {
   const baseStateContext = useContext(StateLoaderConfigurationContext);
 
-  const caller = (options: {
+  const caller = <T>(options: {
     url: string;
     postData?: any;
     excludeBaseUrl?: boolean;
@@ -26,7 +26,7 @@ export function useFetcher<T>() {
       getAuthToken = baseStateContext?.getAuthToken,
       authenticationRequired = baseStateContext?.authenticationRequired,
     } = options;
-    
+
     fetcher<T>({
       url,
       data: method === "GET" ? undefined : postData || {},
@@ -37,5 +37,7 @@ export function useFetcher<T>() {
     });
   };
 
-  return caller;
+  return {
+    fetch: caller,
+  };
 }

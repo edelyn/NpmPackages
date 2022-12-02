@@ -1,4 +1,4 @@
-export { AzureADAuthenticationProvider } from "./providers/AzureADAuthenticationProvider";
+export { AzureADAuthenticationProvider } from "./providers/NaitAzureADAuthProvider";
 
 export * from "./hooks/useGetToken";
 export * from "./types/Types";
