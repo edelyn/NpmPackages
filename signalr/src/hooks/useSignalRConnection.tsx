@@ -2,16 +2,17 @@ import { HubConnection } from "@microsoft/signalr";
 
 import { useContext, useEffect, useState } from "react";
 import { signalRConnector } from "../helpers/signalRConnector";
-import { SignalRContext } from "../providers/SignalRProvider";
-import { SignalREvent } from "../types/Types";
+import { SignalRContext } from "../providers/NAITSignalRProvider";
+import { AuthTokenLoader, SignalREvent } from "../types/Types";
 
 export type connectionStatuses = "closed" | "connecting" | "connected";
 
 export function useSignalRConnection(props: {
   url?: string;
   hubname?: string;
-  signalREvents: SignalREvent[];
-  onConnectionStarted: (connection: HubConnection) => void;
+  listeners?: SignalREvent[];
+  onConnectionStarted?: (connection: HubConnection) => void;
+  getAuthToken?: AuthTokenLoader;
 }): [HubConnection | undefined, connectionStatuses] {
   const [connection, setConnection] = useState<HubConnection | undefined>();
   const [status, setStatus] = useState<connectionStatuses>("closed");
@@ -22,17 +23,19 @@ export function useSignalRConnection(props: {
     var {
       url = scopeContext?.url || "",
       hubname = scopeContext?.defaultHubName || "",
-      signalREvents,
+      listeners = [],
       onConnectionStarted,
+      getAuthToken = scopeContext?.getAuthToken,
     } = props;
     var connect = signalRConnector(
       url,
       hubname,
-      signalREvents,
+      listeners,
       (connection) => {
         setStatus("connected");
         onConnectionStarted?.(connection);
-      }
+      },
+      getAuthToken
     );
 
     connect.onclose(() => {
@@ -54,10 +57,6 @@ export function useSignalRConnection(props: {
       connection?.stop();
     };
   }, [connection]);
-
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
 
   return [connection, status];
 }

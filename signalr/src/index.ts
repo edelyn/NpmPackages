@@ -4,6 +4,6 @@ export * from "./helpers/signalRConnector";
 
 export * from "./hooks/useSignalRConnection";
 
-export * from "./providers/SignalRProvider";
+export * from "./providers/NAITSignalRProvider";
 
 export * from "./types/Types";

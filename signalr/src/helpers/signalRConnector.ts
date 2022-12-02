@@ -3,18 +3,24 @@ import {
   HubConnection,
   HubConnectionBuilder,
 } from "@microsoft/signalr";
-import { SignalREvent } from "../types/Types";
+import { AuthTokenLoader, FetchError, SignalREvent } from "../types/Types";
 
 export function signalRConnector(
   url: string,
   hubname: string,
   signalRItems: SignalREvent[],
-  onConnectionStarted: (connection: HubConnection) => void
+  onConnectionStarted: (connection: HubConnection) => void,
+  getAuthToken?: AuthTokenLoader
 ) {
   const connect = new HubConnectionBuilder()
     .withUrl(`${url}/${hubname}`, {
       skipNegotiation: true,
       transport: HttpTransportType.WebSockets,
+      accessTokenFactory: () =>
+        getAuthToken?.().then((e) => {
+          if (e instanceof FetchError) throw e;
+          return e.token;
+        }) || "",
     })
     .withAutomaticReconnect()
     .build();
