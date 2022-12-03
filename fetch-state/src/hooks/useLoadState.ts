@@ -15,9 +15,10 @@ export function useLoadState<T>(
 ) {
   var fetcher = useFetcher();
 
-  var caller = () => {
+  var caller = (overrides?: { url?: string; postData?: any }) => {
     return fetcher.fetch<T>({
       ...options,
+      ...overrides,
       onChange: (event, data) => {
         if (event === "start") {
           setData({ loading: true });
