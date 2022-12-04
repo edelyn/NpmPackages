@@ -4,8 +4,9 @@ import { useFetcher } from "./useFetcher";
 export function useLoadState<T>(
   options: {
     url: string;
-    postData?: any;
+    data?: any;
     excludeBaseUrl?: boolean;
+    sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
     method?: "GET" | "POST" | "PUT" | "DELETE";
     getAuthToken?: AuthTokenLoader;
     authenticationRequired?: boolean;
@@ -15,7 +16,12 @@ export function useLoadState<T>(
 ) {
   var fetcher = useFetcher();
 
-  var caller = (overrides?: { url?: string; postData?: any }) => {
+  var caller = (overrides?: {
+    url?: string;
+    data?: any;
+    sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
+    method?: "GET" | "POST" | "PUT" | "DELETE";
+  }) => {
     return fetcher.fetch<T>({
       ...options,
       ...overrides,

@@ -4,10 +4,11 @@ import { useLoadState } from "./useLoadState";
 
 type UseStateLoaderProps = {
   url: string;
-  postData?: any;
+  data?: any;
   excludeBaseUrl?: boolean;
   getAuthToken?: AuthTokenLoader;
   authenticationRequired?: boolean;
+  sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
   method?: "GET" | "POST" | "PUT" | "DELETE";
 };
 

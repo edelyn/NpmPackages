@@ -3,25 +3,29 @@ import { fetcher } from "../components/fetcher";
 import { StateLoaderConfigurationContext } from "../providers/NaitFetchStateProvider";
 import { AuthTokenLoader, FetchError } from "../types/Types";
 
+export type UseFetcherFetchProps<T> = {
+  url: string;
+  data?: any;
+  excludeBaseUrl?: boolean;
+  sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  getAuthToken?: AuthTokenLoader;
+  authenticationRequired?: boolean;
+  onChange?: (
+    event: "start" | "end" | "error",
+    data: T | FetchError | undefined
+  ) => void;
+};
+
 export function useFetcher() {
   const baseStateContext = useContext(StateLoaderConfigurationContext);
 
-  const caller = <T>(options: {
-    url: string;
-    postData?: any;
-    excludeBaseUrl?: boolean;
-    method?: "GET" | "POST" | "PUT" | "DELETE";
-    getAuthToken?: AuthTokenLoader;
-    authenticationRequired?: boolean;
-    onChange?: (
-      event: "start" | "end" | "error",
-      data: T | FetchError | undefined
-    ) => void;
-  }) => {
+  const caller = <T>(options: UseFetcherFetchProps<T>) => {
     const {
       url,
-      postData,
+      data,
       excludeBaseUrl,
+      sendDataType,
       method = baseStateContext?.method || "POST",
       getAuthToken = baseStateContext?.getAuthToken,
       authenticationRequired = baseStateContext?.authenticationRequired,
@@ -29,7 +33,8 @@ export function useFetcher() {
 
     fetcher<T>({
       url,
-      data: method === "GET" ? undefined : postData || {},
+      data: method === "GET" ? undefined : data || {},
+      sendDataType,
       baseUrl: excludeBaseUrl ? undefined : baseStateContext?.baseUrl,
       getAuthToken: authenticationRequired ? getAuthToken : undefined,
       method,
