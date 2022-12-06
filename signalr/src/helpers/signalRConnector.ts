@@ -2,20 +2,33 @@ import {
   HttpTransportType,
   HubConnection,
   HubConnectionBuilder,
+  ITransport,
 } from "@microsoft/signalr";
 import { AuthTokenLoader, FetchError, SignalREvent } from "../types/Types";
 
-export function signalRConnector(
-  url: string,
-  hubname: string,
-  signalRItems: SignalREvent[],
-  onConnectionStarted: (connection: HubConnection) => void,
-  getAuthToken?: AuthTokenLoader
-) {
+export function signalRConnector(props: {
+  url: string;
+  hubname: string;
+  listeners: SignalREvent[];
+  transport?: HttpTransportType | ITransport;
+  skipNegotiation?: boolean;
+  onConnectionStarted: (connection: HubConnection) => void;
+  getAuthToken?: AuthTokenLoader;
+}) {
+  const {
+    url,
+    hubname,
+    listeners,
+    skipNegotiation = true,
+    transport = HttpTransportType.WebSockets,
+    onConnectionStarted,
+    getAuthToken,
+  } = props;
+
   const connect = new HubConnectionBuilder()
     .withUrl(`${url}/${hubname}`, {
-      skipNegotiation: true,
-      transport: HttpTransportType.WebSockets,
+      skipNegotiation,
+      transport,
       accessTokenFactory: () =>
         getAuthToken?.().then((e) => {
           if (e instanceof FetchError) throw e;
@@ -26,7 +39,7 @@ export function signalRConnector(
     .build();
 
   connect.start().then(() => {
-    signalRItems.forEach((x) => {
+    listeners.forEach((x) => {
       connect.on(x.eventName, x.handler);
     });
     onConnectionStarted?.(connect);

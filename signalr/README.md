@@ -116,6 +116,51 @@ function App() {
 export default App;
 ```
 
+### Notes about Tokens, SignalR, and ASP.NET Authentiation
+
+Although not directly related to this project, I thought I
+would mention that there is an additional setup on the .NET
+side you may need to add to get the authorization working with
+SignalR hubs. This is due to the fact that the SignalR connection sends
+a query parameter ("access_token") on connection, instead of the
+standard auth bearer header.
+
+Add this to the setup of the setup of your service auth setup. The below example is for azure AD authentication, but the concept is similar
+for all (updating the events of the options)
+
+```csharp
+
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddMicrosoftIdentityWebApi(options =>
+{
+  configuration.Bind("AzureAd", options);
+
+  //This is the part you need to add
+  options.Events = new JwtBearerEvents
+  {
+      OnMessageReceived = context => AddSignalRTokenEvent(context, "/hubs")
+  };
+},
+options =>
+{
+    configuration.Bind("AzureAd", options);
+});
+
+private Task AddSignalRTokenEvent(MessageReceivedContext context, string hubUrlPrefix = "")
+{
+  var accessToken = context.Request.Query["access_token"];
+
+  //if token is there and we are monitoring this path for it
+  if (!string.IsNullOrEmpty(accessToken) &&
+      context.HttpContext.Request.Path.StartsWithSegments(hubUrlPrefix))
+  {
+      context.Token = accessToken;
+  }
+  return Task.CompletedTask;
+}
+
+```
+
 ### Debug
 
 If you are having issues, you can enable the debug panel by setting the debug value to true. This will output a div that contains the values that the provider is using.

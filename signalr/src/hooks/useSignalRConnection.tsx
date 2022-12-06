@@ -1,4 +1,8 @@
-import { HubConnection } from "@microsoft/signalr";
+import {
+  HttpTransportType,
+  HubConnection,
+  ITransport,
+} from "@microsoft/signalr";
 
 import { useContext, useEffect, useState } from "react";
 import { signalRConnector } from "../helpers/signalRConnector";
@@ -11,6 +15,8 @@ export function useSignalRConnection(props: {
   url?: string;
   hubname?: string;
   listeners?: SignalREvent[];
+  transport?: HttpTransportType | ITransport;
+  skipNegotiation?: boolean;
   onConnectionStarted?: (connection: HubConnection) => void;
   getAuthToken?: AuthTokenLoader;
 }): [HubConnection | undefined, connectionStatuses] {
@@ -26,17 +32,22 @@ export function useSignalRConnection(props: {
       listeners = [],
       onConnectionStarted,
       getAuthToken = scopeContext?.getAuthToken,
+      skipNegotiation = true,
+      transport = HttpTransportType.WebSockets,
     } = props;
-    var connect = signalRConnector(
+
+    var connect = signalRConnector({
       url,
       hubname,
       listeners,
-      (connection) => {
+      skipNegotiation,
+      transport,
+      onConnectionStarted: (connection) => {
         setStatus("connected");
         onConnectionStarted?.(connection);
       },
-      getAuthToken
-    );
+      getAuthToken,
+    });
 
     connect.onclose(() => {
       setStatus("closed");
