@@ -35,7 +35,7 @@ You can wrap your application (or specific components) in a NaitFetchStateProvid
 
 This will by default use the values you entered in the .env file.
 
-```tsx
+```ts
 import { NaitFetchStateProvider } from "@nait-aits/fetch-state";
 
 function App() {
@@ -55,7 +55,7 @@ You only need to specify the items you are overriding/need.
 
 For example:
 
-```tsx
+```ts
 <NaitFetchStateProvider
   config={{
     defaultMethod: "GET",
@@ -78,7 +78,7 @@ For example:
 
 If your application required Auth Bearere tokens, you can set the default get token hook here. Anytime a request that requires authentication is called, this hook will be called to get the token and append it to the header.
 
-```tsx
+```ts
 <NaitFetchStateProvider
   config={{
     getAuthToken: useTokenHook,
@@ -92,7 +92,7 @@ If your application required Auth Bearere tokens, you can set the default get to
 
 if you are using the package [@nait-aits\azure-ad-auth](../azure-ad-auth/README.md), you can easily tap into the `useGetToken` hook and all auth is take care of for you (provided it is azure ad auth)
 
-```tsx
+```ts
 import "./App.css";
 import TestAuth from "./TestAuth";
 import { NaitAzureADAuthProvider, useGetToken } from "@nait-aits/azure-ad-auth";
@@ -124,7 +124,7 @@ If you are having issues, you can enable the debug panel by setting the debug va
 
 This hook is used to call get data from an endpoint, while tracking its status (start, end, error). It has a generic type, that specifies what type the data being returned is.
 
-```tsx
+```ts
 var [state, loadState, setState] = useStateLoader<ReturnType>({
   url: "someUrl",
 });
@@ -138,7 +138,7 @@ Unless otherwise specified, the baseUrl above will prepend the url. The only req
 
 Here is a simple page that uses this hook.
 
-```tsx
+```ts
 import { useStateLoader } from "@nait-aits/fetch-state";
 import { useEffect } from "react";
 
@@ -178,7 +178,7 @@ It is similar to useStateLoader, but you sepcify the setter. The state must be o
 
 It returns the method load the data. The only required parameter is the url.
 
-```tsx
+```ts
 
 var [data, setData] = useState<StateItem<ReturnType>>();
 
@@ -195,7 +195,7 @@ loadData();
 
 Here is a simple page that uses this hook.
 
-```tsx
+```ts
 import { StateItem, useLoadState } from "@nait-aits/fetch-state";
 import { useEffect, useState } from "react";
 
@@ -247,7 +247,7 @@ It is a simple hook to instantiate, requiring no parameters, and returns a fetch
 
 The only required parameter is the url, but in order to know its result, you will need to tap into the onChange parameter.
 
-```tsx
+```ts
 var fetcher = useFetcher();
 ...
 fetcher.fetch<ReturnType>({
@@ -266,7 +266,7 @@ You can use the same fetcher multiple times, it is not tied to a single state/en
 
 Here is a simple page that uses this hook.
 
-```tsx
+```ts
 import { FetchError, useFetcher } from "@nait-aits/fetch-state";
 import { useState } from "react";
 

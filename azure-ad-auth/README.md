@@ -40,7 +40,7 @@ You will need to wrap your application (or specific components) in a NaitAzureAD
 
 This will by default use the values you entered in the .env file.
 
-```tsx
+```ts
 import { NaitAzureADAuthProvider } from "@nait-aits/azure-ad-auth";
 
 function App() {
@@ -52,34 +52,6 @@ function App() {
 }
 ```
 
-### Integration with @nait-aits\fetch-state
-
-if you are using the package [@nait-aits\fetch-state](../fetch-state/README.md), you can easily tap into the `useGetToken` hook and all auth is take care of for you.
-
-```tsx
-import "./App.css";
-import TestAuth from "./TestAuth";
-import { NaitAzureADAuthProvider, useGetToken } from "@nait-aits/azure-ad-auth";
-
-import { StateLoaderConfigurationProvider } from "@nait-aits/fetch-state";
-
-function App() {
-  return (
-    <NaitAzureADAuthProvider>
-      <StateLoaderConfigurationProvider
-        options={{
-          getAuthToken: useGetToken,
-        }}
-      >
-        <TestAuth />
-      </StateLoaderConfigurationProvider>
-    </NaitAzureADAuthProvider>
-  );
-}
-
-export default App;
-```
-
 ## Usage
 
 You should now be at a point where everything works. Now what about logging in/out? What is the username? Are they even logged in?
@@ -88,7 +60,7 @@ To do this, you just use the azure msal items.
 
 Here is a very simple example page.
 
-```tsx
+```ts
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 
 function SamplePage() {
@@ -122,7 +94,7 @@ Only need to specify the items you are overriding/need.
 
 For example:
 
-```tsx
+```ts
 <NaitAzureADAuthProvider
   config={{
     redirectUri: `${window.location.origin}/login-complete`,
@@ -136,7 +108,7 @@ For example:
 
 If you ever need to get the token for a user, you can use the useGetToken hook. This will return a token, and perform any token refresh if needed.
 
-```tsx
+```ts
 import { useGetToken } from "@azure/msal-react";
 
 ...
@@ -156,7 +128,7 @@ If you are having issues, you can enable the debug panel by setting the debug va
 
 ### All Config values
 
-```tsx
+```ts
 {
     clientId?: string;
     tenantId?: string;
@@ -167,4 +139,32 @@ If you are having issues, you can enable the debug panel by setting the debug va
     //from @azure/msal-browser
     cacheOptions?: CacheOptions;
 }
+```
+
+### Integration with @nait-aits/fetch-state or @nait-aits/signalr
+
+if you are using the package [@nait-aits/fetch-state](../fetch-state/README.md) or [@nait-aits/signalr](../signalr/README.md), you can easily tap into the `useGetToken` hook and all auth is take care of for you.
+
+```ts
+import "./App.css";
+import TestAuth from "./TestAuth";
+import { NaitAzureADAuthProvider, useGetToken } from "@nait-aits/azure-ad-auth";
+
+import { StateLoaderConfigurationProvider } from "@nait-aits/fetch-state";
+
+function App() {
+  return (
+    <NaitAzureADAuthProvider>
+      <StateLoaderConfigurationProvider
+        options={{
+          getAuthToken: useGetToken,
+        }}
+      >
+        <TestAuth />
+      </StateLoaderConfigurationProvider>
+    </NaitAzureADAuthProvider>
+  );
+}
+
+export default App;
 ```
