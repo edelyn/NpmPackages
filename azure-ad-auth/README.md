@@ -1,6 +1,6 @@
 # azure-ad-auth
 
-This package helps with the setup of react applications using azure ad authentication. By having a single provider, and supporting .env variables.
+This package helps with the setup of react applications using Azure AD authentication.
 
 This currently does not support B2C, but that will be coming.
 
@@ -22,30 +22,25 @@ npm install @nait-aits/azure-ad-auth
 
 ## Setup
 
-To make setup simpler, you can use .env variables.
-
-### Supported .env Variables
-
-```
-REACT_APP_AZUREAD_CLIENTID=GUID
-REACT_APP_AZUREAD_TENANTID=GUID
-REACT_APP_AZUREAD_SCOPES_CSV=User.Read,User.Write
-```
-
 ## NaitAzureADAuthProvider
 
-You will need to wrap your application (or specific components) in a NaitAzureADAuthProvider. This will apply the configuration.
+You will need to wrap your application (or specific components) in a NaitAzureADAuthProvider. This will apply the configuration across all children.
+
+You will need to provide a clientId and tenantId at a minimum.
 
 ### App.ts (or app entry point)
-
-This will by default use the values you entered in the .env file.
 
 ```ts
 import { NaitAzureADAuthProvider } from "@nait-aits/azure-ad-auth";
 
 function App() {
   return (
-    <NaitAzureADAuthProvider>
+    <NaitAzureADAuthProvider
+      config={{
+        clientId: "GUID",
+        tenantId: "GUID",
+      }}
+    >
       <Control />
     </NaitAzureADAuthProvider>
   );
@@ -88,7 +83,7 @@ export default SamplePage;
 
 ### NaitAzureADAuthProvider config (optional)
 
-If you have any overrides (or or not using an .env file), you can specify the configuration here as well
+If you have any overrides, you can specify the configuration here as well
 
 Only need to specify the items you are overriding/need.
 

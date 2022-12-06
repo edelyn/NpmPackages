@@ -13,19 +13,6 @@ npm install @nait-aits/signalR
 - [NAITSignalRProvider](#naitsignalrprovider)
 - [useSignalRConnection](#usesignalrconnection)
 
-## Setup
-
-To make setup simpler, you can use .env variables.
-
-### Supported .env Variables
-
-The base URL will be appended to any call (unless specified not to). This means you wont need to add your server or hub to every call.
-
-```
-REACT_APP_SIGNALR_URL=URL
-REACT_APP_SIGNALR_HUB=hubname
-```
-
 ## useSignalRConnection
 
 This hook is used to setup your connection. You will specify what events you are listening to, and their callbacks, and any action you want to perform once the connection is established. You can also specify the url, hub, get token, etc.
@@ -130,11 +117,9 @@ And to handle it in react (notice the userName doesnt match the nameOfUser above
 
 ## NAITSignalRProvider
 
-You can wrap your application (or specific components) in a NAITSignalRProvider if you want to use the .env variables, or set app/component default values. If you don't, you won't be able to globally override default settings. You can still use these items, but they will need to be specified each call.
+You can wrap your application (or specific components) in a NAITSignalRProvider if you want to set app/component default values. If you don't, you won't be able to globally override default settings. You can still use these items, but they will need to be specified each call.
 
 ### App.ts (or app/component entry point)
-
-This will by default use the values you entered in the .env file.
 
 ```ts
 import { NAITSignalRProvider } from "@nait-aits/signalr";
@@ -148,9 +133,9 @@ function App() {
 }
 ```
 
-### NAITSignalRProvider config (optional)
+### NAITSignalRProvider config
 
-If you have any overrides (or or not using an .env file), you can specify the configuration defaults here as well. You can set the url, default hubname, getAuthToken (for authenticated calls), or enable the debug panel.
+You can set the url, default hubname, getAuthToken (for authenticated calls), or enable the debug panel.
 
 You only need to specify the items you are overriding/need.
 

@@ -17,23 +17,11 @@ npm install @nait-aits/fetch-state
 
 ## Setup
 
-To make setup simpler, you can use .env variables.
-
-### Supported .env Variables
-
-The base URL will be appended to any call (unless specified not to). This means you wont need to add your server name to every call.
-
-```
-REACT_APP_API_BASE_URL=URL
-```
-
 ## NaitFetchStateProvider
 
-You can wrap your application (or specific components) in a NaitFetchStateProvider if you want to use the .env variables, or set app/component default values. If you don't, you won't be able to globally override default settings (baseUrl, getAuthToken, etc). You can still use these items, but they will need to be specified each call.
+You can wrap your application (or specific components) in a NaitFetchStateProvider. If you don't, you won't be able to globally override default settings (baseUrl, getAuthToken, etc). You can still use these items, but they will need to be specified each call.
 
 ### App.ts (or app/component entry point)
-
-This will by default use the values you entered in the .env file.
 
 ```ts
 import { NaitFetchStateProvider } from "@nait-aits/fetch-state";
@@ -49,7 +37,7 @@ function App() {
 
 ### NaitFetchStateProvider config (optional)
 
-If you have any overrides other than the base url (or or not using an .env file), you can specify the configuration defaults here as well. For example, you can set all endpoint calls to be POST and require authentication by default.
+If you have any overrides, you can specify the configuration defaults here as well. For example, you can set all endpoint calls to be POST and require authentication by default.
 
 You only need to specify the items you are overriding/need.
 
@@ -58,6 +46,7 @@ For example:
 ```ts
 <NaitFetchStateProvider
   config={{
+    baseUrl: "http://google.com",
     defaultMethod: "GET",
     authenticationRequired: true,
   }}

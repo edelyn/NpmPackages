@@ -6,12 +6,12 @@ NPM Packages to make development setup easier and hopefully end up with cleaner 
 
 ## [azure-ad-helpers ](./azure-ad-auth/README.md)
 
-Package to make using azure AD authentication in your application easier by having a single provider and allow usage of .env variables for low effort code.
+Package to make using azure AD authentication in your application easier by having a single provider for low effort code.
 
 #### Sample
 
 ```html
-<NaitAzureADAuthProvider 
+<NaitAzureADAuthProvider
     config={{ clientId: "GUID" }}>
   <Control />
 </NaitAzureADAuthProvider>
@@ -19,7 +19,7 @@ Package to make using azure AD authentication in your application easier by havi
 
 ## [fetch-state](./fetch-state/README.md)
 
-Package to make fetching data easier, and also a possible replacement for redux, depending on your needs. Compatible with azure-ad-helpers by adding auth tokens to fet calls.
+Package to make fetching data easier, and also a possible replacement for redux, depending on your needs. Compatible with azure-ad-helpers by adding auth tokens to fetch calls.
 
 #### Sample
 

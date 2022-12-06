@@ -17,8 +17,8 @@ export function NAITSignalRProvider(props: {
   const { children, config = {} } = props;
 
   var newConfig: SignalROptions = {
-    url: process.env.REACT_APP_SIGNALR_URL || "",
-    defaultHubName: process.env.REACT_APP_SIGNALR_HUB || "",
+    url: config.url || "",
+    defaultHubName: config.defaultHubName || "",
     getAuthToken: config.getAuthToken?.(),
   };
 
@@ -27,7 +27,7 @@ export function NAITSignalRProvider(props: {
       {props.config?.debug && (
         <div>
           <h3>NAITSignalRProvider Config</h3>
-          <p>url: {newConfig.url}</p>
+          <p>default url: {newConfig.url}</p>
           <p>defaultHubName: {newConfig.defaultHubName}</p>
         </div>
       )}

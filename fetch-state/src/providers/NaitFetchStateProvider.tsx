@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import { AuthTokenLoader } from "../types/Types";
 
 type NaitFetchStateProviderConfig = {
-  baseUrl?: string;
+  baseUrl: string;
   defaultMethod?: "GET" | "POST" | "PUT" | "DELETE";
   authenticationRequired?: boolean;
   getAuthToken?: () => AuthTokenLoader;
@@ -11,7 +11,7 @@ type NaitFetchStateProviderConfig = {
 
 const StateLoaderConfigurationContext = createContext<
   | {
-      baseUrl?: string;
+      baseUrl: string;
       method?: "GET" | "POST" | "PUT" | "DELETE";
       authenticationRequired?: boolean;
       getAuthToken?: AuthTokenLoader;
@@ -34,7 +34,7 @@ function NaitFetchStateProvider(props: {
   return (
     <StateLoaderConfigurationContext.Provider
       value={{
-        baseUrl: baseUrl || process.env.REACT_APP_API_BASE_URL,
+        baseUrl: baseUrl || `${window.location.origin}/`,
         method: defaultMethod,
         authenticationRequired: authenticationRequired,
         getAuthToken: getAuthToken?.(),
@@ -43,7 +43,7 @@ function NaitFetchStateProvider(props: {
       {debug && (
         <div>
           <h3>NaitFetchStateProvider Config</h3>
-          <p>baseUrl: {baseUrl || process.env.REACT_APP_API_BASE_URL}</p>
+          <p>baseUrl: {baseUrl || `${window.location.origin}/`}</p>
           <p>defaultMethod: {defaultMethod}</p>
           <p>authenticationRequired: {authenticationRequired?.toString()}</p>
           <p>getAuthToken: {getAuthToken ? "Enabled" : "Not Present"}</p>

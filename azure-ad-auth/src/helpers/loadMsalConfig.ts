@@ -1,8 +1,8 @@
 import { Configuration, CacheOptions } from "@azure/msal-browser";
 
 export type MsalConfig = {
-  clientId?: string;
-  tenantId?: string;
+  clientId: string;
+  tenantId: string;
   redirectUri?: string;
   maxLogLevel?: 0 | 1 | 2 | 3 | 4;
   cacheOptions?: CacheOptions;
