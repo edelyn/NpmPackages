@@ -13,7 +13,7 @@ npm install @nait-aits/fetch-state
 - [NaitFetchStateProvider](#naitfetchstateprovider)
 - [useStateLoader](#usestateloader)
 - [useLoadState](#useloadstate)
-- [useEftcher](#usefetcher)
+- [useFetcher](#usefetcher)
 
 ## Setup
 
@@ -123,6 +123,8 @@ It returns an array that contains the data state (of type `StateItem<T>`), the m
 
 Unless otherwise specified, the baseUrl above will prepend the url. The only required parameter is the url.
 
+_Note: The loadState method returns a cancellation function that can be used to cancel the call._
+
 ### Usage
 
 Here is a simple page that uses this hook.
@@ -140,7 +142,9 @@ export function SamplePage() {
   });
 
   useEffect(() => {
-    loadProducts();
+    //by returning the cancellation function, this will
+    //be automatically aborted when you leave this control
+    return loadProducts();
   }, []);
 
   return (
@@ -167,6 +171,8 @@ It is similar to useStateLoader, but you sepcify the setter. The state must be o
 
 It returns the method load the data. The only required parameter is the url.
 
+_Note: The load function returns a cancellation function that can be used to cancel the call, if needed._
+
 ```ts
 
 var [data, setData] = useState<StateItem<ReturnType>>();
@@ -177,7 +183,11 @@ var loadData = useLoadState<ReturnType>({
 
 ...
 
-loadData();
+var cancel = loadData();
+
+//this will abort the call
+cancel();
+
 ```
 
 ### Usage
@@ -236,10 +246,12 @@ It is a simple hook to instantiate, requiring no parameters, and returns a fetch
 
 The only required parameter is the url, but in order to know its result, you will need to tap into the onChange parameter.
 
+_Note: The fetch function returns a cancellation function that can be used to cancel the call, if needed._
+
 ```ts
 var fetcher = useFetcher();
 ...
-fetcher.fetch<ReturnType>({
+var cancel = fetcher.fetch<ReturnType>({
     url: someUrl,
     onChange: (event,data)=>{
         if(event === "end"){
@@ -247,9 +259,15 @@ fetcher.fetch<ReturnType>({
         }
     }
 });
+
+...
+
+//cancel the fetch
+cancel();
+
 ```
 
-You can use the same fetcher multiple times, it is not tied to a single state/endpoint.
+You can use the same fetcher multiple times (each with its own cancel token), it is not tied to a single state/endpoint.
 
 ### Usage
 

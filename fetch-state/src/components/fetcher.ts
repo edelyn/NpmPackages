@@ -10,6 +10,7 @@ export function fetcher<U>(props: {
   baseUrl?: string;
   sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
   method?: "GET" | "POST" | "PUT" | "DELETE";
+  abortSignal?: AbortSignal;
   onChange?: (event: "start" | "end" | "error", data?: U | FetchError) => void;
   getAuthToken?: AuthTokenLoader;
 }) {
@@ -22,6 +23,9 @@ export function fetcher<U>(props: {
     onChange,
     getAuthToken,
   } = props;
+
+  const controller = new AbortController();
+  var abortSignal = controller.signal;
 
   function performFetch(token?: string) {
     if (getAuthToken && !token) {
@@ -57,6 +61,7 @@ export function fetcher<U>(props: {
             Authorization: `Bearer ${token}`,
           },
       body: body,
+      signal: abortSignal,
     };
 
     onChange?.("start");
@@ -106,6 +111,10 @@ export function fetcher<U>(props: {
         console.log("fetcher: getAuthToken Error", e);
       });
   }
+
+  return () => {
+    controller.abort();
+  };
 }
 
 export default fetcher;

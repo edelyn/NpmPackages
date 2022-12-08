@@ -12,7 +12,7 @@ function UseGetToken() {
   });
 
   useEffect(() => {
-    loadRepos();
+    return loadRepos();
   }, []);
 
   return (

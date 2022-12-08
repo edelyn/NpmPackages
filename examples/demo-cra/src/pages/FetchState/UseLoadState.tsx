@@ -17,7 +17,7 @@ function UseLoadState() {
   );
 
   useEffect(() => {
-    loadRepos();
+    return loadRepos();
   }, []);
 
   return (

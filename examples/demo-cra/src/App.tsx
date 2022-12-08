@@ -20,6 +20,7 @@ function App() {
     >
       <NaitFetchStateProvider
         config={{
+          baseUrl: process.env.REACT_APP_API_BASE_URL || "",
           getAuthToken: useGetToken,
           debug: showFetchDebug,
         }}

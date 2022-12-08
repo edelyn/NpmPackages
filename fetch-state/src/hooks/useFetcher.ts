@@ -31,7 +31,11 @@ export function useFetcher() {
       authenticationRequired = baseStateContext?.authenticationRequired,
     } = options;
 
-    fetcher<T>({
+    const controller = new AbortController();
+
+    const signal = controller.signal;
+
+    return fetcher<T>({
       url,
       data: method === "GET" ? undefined : data || {},
       sendDataType,
@@ -39,7 +43,10 @@ export function useFetcher() {
       getAuthToken: authenticationRequired ? getAuthToken : undefined,
       method,
       onChange: options.onChange,
+      abortSignal: signal,
     });
+
+    // return () => controller.abort();
   };
 
   return {
