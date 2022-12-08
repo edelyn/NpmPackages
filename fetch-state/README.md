@@ -139,12 +139,21 @@ export function SamplePage() {
   var [products, loadProducts, setProducts] = useStateLoader<Product[]>({
     url: `Products/GetAllProducts`,
     method: "GET",
+    //specify data here
+    data: {
+      prop1: "Test",
+    },
   });
 
   useEffect(() => {
     //by returning the cancellation function, this will
     //be automatically aborted when you leave this control
-    return loadProducts();
+    return loadProducts({
+      //or specify data here
+      data: {
+        prop1: "Test",
+      },
+    });
   }, []);
 
   return (
