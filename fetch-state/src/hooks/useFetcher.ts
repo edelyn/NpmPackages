@@ -3,18 +3,20 @@ import { fetcher } from "../components/fetcher";
 import { StateLoaderConfigurationContext } from "../providers/NaitFetchStateProvider";
 import { AuthTokenLoader, FetchError } from "../types/Types";
 
+export type SendDataType = "QUERYSTRING" | "JSON" | "FORMDATA";
+export type MethodType = "GET" | "POST" | "PUT" | "DELETE";
+
+export type ChangeEventType = "start" | "end" | "error";
+
 export type UseFetcherFetchProps<T> = {
   url: string;
   data?: any;
   excludeBaseUrl?: boolean;
-  sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  sendDataType?: SendDataType;
+  method?: MethodType;
   getAuthToken?: AuthTokenLoader;
   authenticationRequired?: boolean;
-  onChange?: (
-    event: "start" | "end" | "error",
-    data: T | FetchError | undefined
-  ) => void;
+  onChange?: (event: ChangeEventType, data: T | FetchError | undefined) => void;
 };
 
 export function useFetcher() {

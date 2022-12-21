@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@nait-aits/azure-ad-auth": "^0.0.6",
-    "@nait-aits/fetch-state": "file:../../fetch-state/nait-aits-fetch-state-0.0.7.tgz",
+    "@nait-aits/fetch-state": "file:../../fetch-state/nait-aits-fetch-state-0.0.9.tgz",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
