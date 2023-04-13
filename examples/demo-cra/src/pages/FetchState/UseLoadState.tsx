@@ -7,17 +7,17 @@ type Repo = { name: string; id: number; fullName: string; html_url: string };
 function UseLoadState() {
   var [repos, setRepos] = useState<StateItem<Repo[] | undefined>>();
 
-  var loadRepos = useLoadState<Repo[]>(
-    {
-      url: "https://api.github.com/users/edelyn/repos",
-      excludeBaseUrl: true,
-      method: "GET",
-    },
-    setRepos
-  );
+  // var loadRepos = useLoadState<Repo[]>(
+  //   {
+  //     url: "https://api.github.com/users/edelyn/repos",
+  //     excludeBaseUrl: true,
+  //     method: "GET",
+  //   },
+  //   setRepos
+  // );
 
   useEffect(() => {
-    return loadRepos();
+    // return loadRepos();
   }, []);
 
   return (
@@ -58,7 +58,7 @@ function UseLoadState() {
             ))}
             <button
               onClick={() => {
-                loadRepos();
+                // loadRepos();
               }}
             >
               Reload

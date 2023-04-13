@@ -28,6 +28,14 @@ export function useGetToken() {
           subError: string;
           name: string;
         }) => {
+          if (
+            reason.errorCode === "invalid_grant" ||
+            reason.errorCode === "interaction_required"
+          ) {
+            localStorage.removeItem("auth_token");
+            instance.logoutPopup();
+          }
+
           return new FetchError(
             reason.errorMessage,
             reason.errorCode,
