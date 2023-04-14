@@ -24,7 +24,7 @@ export function useLogin() {
     },
     loginRedirect: (request?: RedirectRequest) => {
       var scopes = request?.scopes ?? scopeContext ?? [];
-
+      
       return instance.loginRedirect({
         ...(request || {}),
         scopes,
