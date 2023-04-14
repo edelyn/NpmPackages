@@ -1,7 +1,4 @@
-import {
-  Configuration,
-  CacheOptions,
-} from "@azure/msal-browser";
+import { Configuration, CacheOptions } from "@azure/msal-browser";
 
 export type MsalConfig = {
   clientId: string;
@@ -10,6 +7,7 @@ export type MsalConfig = {
   maxLogLevel?: 0 | 1 | 2 | 3 | 4;
   cacheOptions?: CacheOptions;
   knownAuthorities?: string[];
+  navigateToLoginRequestUrl?: boolean;
 };
 
 /**
@@ -21,10 +19,11 @@ export const loadMsalConfig = (props: MsalConfig): Configuration => {
   const {
     clientId = "",
     signinAuthority = "",
-    knownAuthorities,
+    knownAuthorities = [],
     redirectUri = "",
     maxLogLevel = 0,
     cacheOptions = {},
+    navigateToLoginRequestUrl = false,
   } = props;
 
   return {
@@ -32,8 +31,8 @@ export const loadMsalConfig = (props: MsalConfig): Configuration => {
       clientId: clientId,
       authority: signinAuthority,
       redirectUri: redirectUri,
-      navigateToLoginRequestUrl: false,
-      knownAuthorities: knownAuthorities
+      navigateToLoginRequestUrl: navigateToLoginRequestUrl,
+      knownAuthorities: knownAuthorities,
     },
     cache: cacheOptions,
     system: {

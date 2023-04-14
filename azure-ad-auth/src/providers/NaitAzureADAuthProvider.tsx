@@ -14,7 +14,7 @@ type ConfigOptions = {
   /** The tenant id for the azure ad app registration. If specifying this do not provide signinAuthority. Omit for B2C */
   tenantId?: string;
 
-  /** This is generally only needed for B2C. If using this, omit the tenantId.  */
+  /** This is generally only needed for B2C. In non B2C scenarios, this would most likely be https://login.microsoftonline.com/tenantId.  If using this, omit the tenantId property.  */
   signinAuthority?: string;
 
   /** The redirect uri after authenticating */
@@ -22,7 +22,7 @@ type ConfigOptions = {
   maxLogLevel?: 0 | 1 | 2 | 3 | 4;
   cacheOptions?: CacheOptions;
 
-  /** The scopes to use agains the AD if none are specified in code (i.e. api://XXX/user_login) */
+  /** The scopes to use for login/logout/token retrieval if none are specified in code (i.e. api://XXX/user_login) */
   defaultScopes?: string[];
 
   /** known authorities, mainly useful for B2C. i.e. xxx.b2clogin.com */
@@ -30,6 +30,9 @@ type ConfigOptions = {
 
   /** If true, will show the config in the page */
   debug?: boolean;
+
+  /** If true, will redirect to the login request url after login (experitmental) */
+  navigateToLoginRequestUrl?: boolean;
 };
 
 export function NaitAzureADAuthProvider(props: {
@@ -51,6 +54,7 @@ export function NaitAzureADAuthProvider(props: {
     },
     defaultScopes = [],
     debug,
+    navigateToLoginRequestUrl = false,
   } = config;
 
   var fullConfig: MsalConfig = {
@@ -59,6 +63,7 @@ export function NaitAzureADAuthProvider(props: {
     maxLogLevel,
     cacheOptions,
     knownAuthorities,
+    navigateToLoginRequestUrl,
     signinAuthority:
       signinAuthority ?? "https://login.microsoftonline.com/" + tenantId,
     // b2cConfig: b2cConfig,
@@ -82,13 +87,17 @@ export function NaitAzureADAuthProvider(props: {
               <b>redirectUri:</b> {fullConfig.redirectUri}
             </p>
             <p>
-              <b>scopes:</b> {defaultScopes?.join(",")}
+              <b>default scopes:</b> {defaultScopes?.join(",")}
             </p>
             <p>
               <b>knownAuthorities:</b> {knownAuthorities?.join(",")}
             </p>
             <p>
               <b>maxLogLevel: </b> {fullConfig.maxLogLevel}
+            </p>
+            <p>
+              <b>Navigate To Login RequestUrl: </b>{" "}
+              {fullConfig.navigateToLoginRequestUrl?.toString()}
             </p>
             <p>
               <b>cacheLocation:</b> {fullConfig.cacheOptions?.cacheLocation} -{" "}
