@@ -15,6 +15,8 @@ function App() {
   return (
     <NaitAzureADAuthProvider
       config={{
+        clientId: process.env.REACT_APP_AZURE_AD_CLIENT_ID || "",
+        tenantId: process.env.REACT_APP_AZURE_AD_TENANT_ID || "",
         debug: showAdDebug,
       }}
     >

@@ -47,6 +47,38 @@ function App() {
 }
 ```
 
+## Azure B2C
+
+If you are using Azure B2C, there are a few differences.
+
+1. Do not include the tenant id
+2. Specify signinAuthority
+  * will be something like "https://xxx.b2clogin.com/xxx.onmicrosoft.com/signinsignup"
+3. Specify the knownAuthorities
+  * Will be something like "xxx.b2clogin.com"
+
+### App.ts (or app entry point)
+
+```ts
+import { NaitAzureADAuthProvider } from "@nait-aits/azure-ad-auth";
+
+function App() {
+  return (
+    <NaitAzureADAuthProvider
+      config={{
+        clientId: "GUID",
+        signinAuthority: "https://xxx.b2clogin.com/xxx.onmicrosoft.com/signinsignup",
+        knownAuthorities: ["xxx.b2clogin.com"],
+        defaultScopes: ["https://xxx.onmicrosoft.com/clientId/tasks.read"],
+        redirectUri: "http://localhost:3000",
+      }}
+    >
+      <Control />
+    </NaitAzureADAuthProvider>
+  );
+}
+```
+
 ## Usage
 
 You should now be at a point where everything works. Now what about logging in/out? What is the username? Are they even logged in?
@@ -133,6 +165,10 @@ If you are having issues, you can enable the debug panel by setting the debug va
     debug?:boolean;
     //from @azure/msal-browser
     cacheOptions?: CacheOptions;
+
+    //B2C Values
+    signinAuthority?:string;
+    knownAuthorities?: string[];
 }
 ```
 

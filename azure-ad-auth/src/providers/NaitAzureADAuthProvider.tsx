@@ -8,12 +8,27 @@ export const AzureADScopeContext = createContext<string[] | undefined>(
 );
 
 type ConfigOptions = {
+  /** The client Id for the azure ad app registration */
   clientId: string;
-  tenantId: string;
+
+  /** The tenant id for the azure ad app registration. If specifying this do not provide signinAuthority. Omit for B2C */
+  tenantId?: string;
+
+  /** This is generally only needed for B2C. If using this, omit the tenantId.  */
+  signinAuthority?: string;
+
+  /** The redirect uri after authenticating */
   redirectUri?: string;
   maxLogLevel?: 0 | 1 | 2 | 3 | 4;
   cacheOptions?: CacheOptions;
+
+  /** The scopes to use agains the AD if none are specified in code (i.e. api://XXX/user_login) */
   defaultScopes?: string[];
+
+  /** known authorities, mainly useful for B2C. i.e. xxx.b2clogin.com */
+  knownAuthorities?: string[];
+
+  /** If true, will show the config in the page */
   debug?: boolean;
 };
 
@@ -26,6 +41,8 @@ export function NaitAzureADAuthProvider(props: {
   const {
     clientId,
     tenantId,
+    signinAuthority,
+    knownAuthorities,
     redirectUri = `${window.location.origin}/`,
     maxLogLevel = 0,
     cacheOptions = {
@@ -35,12 +52,16 @@ export function NaitAzureADAuthProvider(props: {
     defaultScopes = [],
     debug,
   } = config;
+
   var fullConfig: MsalConfig = {
     clientId,
-    tenantId: "https://login.microsoftonline.com/" + tenantId,
     redirectUri,
     maxLogLevel,
     cacheOptions,
+    knownAuthorities,
+    signinAuthority:
+      signinAuthority ?? "https://login.microsoftonline.com/" + tenantId,
+    // b2cConfig: b2cConfig,
   };
 
   const msalInstance = new PublicClientApplication(loadMsalConfig(fullConfig));
@@ -55,13 +76,16 @@ export function NaitAzureADAuthProvider(props: {
               <b>clientId:</b> {fullConfig.clientId}
             </p>
             <p>
-              <b>tenantId:</b> {fullConfig.tenantId}
+              <b>signin authority:</b> {fullConfig.signinAuthority}
             </p>
             <p>
               <b>redirectUri:</b> {fullConfig.redirectUri}
             </p>
             <p>
               <b>scopes:</b> {defaultScopes?.join(",")}
+            </p>
+            <p>
+              <b>knownAuthorities:</b> {knownAuthorities?.join(",")}
             </p>
             <p>
               <b>maxLogLevel: </b> {fullConfig.maxLogLevel}
