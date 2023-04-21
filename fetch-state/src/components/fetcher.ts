@@ -10,6 +10,7 @@ export function fetcher<U>(props: {
   baseUrl?: string;
   sendDataType?: "QUERYSTRING" | "JSON" | "FORMDATA";
   method?: "GET" | "POST" | "PUT" | "DELETE";
+  headers?: Record<string, string>;
   abortSignal?: AbortSignal;
   onChange?: (event: "start" | "end" | "error", data?: U | FetchError) => void;
   getAuthToken?: AuthTokenLoader;
@@ -20,6 +21,7 @@ export function fetcher<U>(props: {
     baseUrl,
     method = "post",
     sendDataType = "JSON",
+    headers,
     onChange,
     getAuthToken,
   } = props;
@@ -52,14 +54,23 @@ export function fetcher<U>(props: {
       }
     }
 
+    var fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+
+    //add token if present
+    if (getAuthToken) {
+      fetchHeaders = { ...fetchHeaders, Authorization: `Bearer ${token}` };
+    }
+
+    //add headers if present
+    if (headers) {
+      Object.keys(headers).forEach((key) => {
+        fetchHeaders = { ...fetchHeaders, [key]: headers[key] };
+      });
+    }
+
     var fetchParams: RequestInit = {
       method: method,
-      headers: !getAuthToken
-        ? { "Content-Type": "application/json" }
-        : {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+      headers: fetchHeaders,
       body: body,
       signal: abortSignal,
     };
