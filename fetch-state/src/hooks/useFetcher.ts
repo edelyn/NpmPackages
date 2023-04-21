@@ -14,8 +14,9 @@ export type UseFetcherFetchProps<T> = {
   excludeBaseUrl?: boolean;
   sendDataType?: SendDataType;
   method?: MethodType;
-  getAuthToken?: AuthTokenLoader;
   authenticationRequired?: boolean;
+  headers?: Record<string, string>;
+  getAuthToken?: AuthTokenLoader;
   onChange?: (event: ChangeEventType, data: T | FetchError | undefined) => void;
 };
 
@@ -30,6 +31,7 @@ export function useFetcher() {
       sendDataType,
       method = baseStateContext?.method || "POST",
       getAuthToken = baseStateContext?.getAuthToken,
+      headers,
       authenticationRequired = baseStateContext?.authenticationRequired,
     } = options;
 
@@ -46,6 +48,7 @@ export function useFetcher() {
       method,
       onChange: options.onChange,
       abortSignal: signal,
+      headers,
     });
 
     // return () => controller.abort();

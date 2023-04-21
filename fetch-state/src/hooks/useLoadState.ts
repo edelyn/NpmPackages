@@ -15,6 +15,7 @@ export type UseLoadStateOptions = {
   keepExistingDataWhileLoading?: boolean;
   sendDataType?: SendDataType;
   method?: MethodType;
+  headers?: Record<string, string>;
 };
 
 export type UseLoadStateChange<T> = (
@@ -33,6 +34,7 @@ export function useLoadState<T>(
     url?: string;
     data?: any;
     sendDataType?: SendDataType;
+    headers?: Record<string, string>;
     method?: MethodType;
   }) => {
     return fetcher.fetch<T>({
