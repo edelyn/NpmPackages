@@ -20,7 +20,8 @@ export type UseLoadStateOptions = {
 
 export type UseLoadStateChange<T> = (
   event: ChangeEventType,
-  data: T | FetchError
+  data: T | FetchError,
+  headers?: Headers
 ) => void;
 
 export function useLoadState<T>(

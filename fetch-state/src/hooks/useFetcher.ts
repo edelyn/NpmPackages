@@ -17,7 +17,7 @@ export type UseFetcherFetchProps<T> = {
   authenticationRequired?: boolean;
   headers?: Record<string, string>;
   getAuthToken?: AuthTokenLoader;
-  onChange?: (event: ChangeEventType, data: T | FetchError | undefined) => void;
+  onChange?: (event: ChangeEventType, data: T | FetchError | undefined, headers?: Headers) => void;
 };
 
 export function useFetcher() {
