@@ -12,7 +12,11 @@ export function fetcher<U>(props: {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: Record<string, string>;
   abortSignal?: AbortSignal;
-  onChange?: (event: "start" | "end" | "error", data?: U | FetchError) => void;
+  onChange?: (
+    event: "start" | "end" | "error",
+    data?: U | FetchError,
+    headers?: Headers
+  ) => void;
   getAuthToken?: AuthTokenLoader;
 }) {
   const {
@@ -96,10 +100,10 @@ export function fetcher<U>(props: {
 
         if (contentType && contentType.indexOf("application/json") !== -1) {
           response.json().then((result: U) => {
-            onChange?.("end", result);
+            onChange?.("end", result, response.headers);
           });
         } else {
-          onChange?.("end");
+          onChange?.("end", undefined, response.headers);
         }
       })
       .catch((e) => {
