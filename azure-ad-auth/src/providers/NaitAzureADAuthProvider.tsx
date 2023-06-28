@@ -71,6 +71,12 @@ export function NaitAzureADAuthProvider(props: {
 
   const msalInstance = new PublicClientApplication(loadMsalConfig(fullConfig));
 
+  if (debug) {
+    console.log("fullConfig", fullConfig);
+    console.log("loadMsalConfig", loadMsalConfig(fullConfig));
+    console.log("msalInstance", msalInstance);
+  }
+
   return (
     <MsalProvider instance={msalInstance}>
       <AzureADScopeContext.Provider value={defaultScopes}>

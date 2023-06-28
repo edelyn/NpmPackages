@@ -30,10 +30,15 @@ export function useGetToken() {
         }) => {
           if (
             reason.errorCode === "invalid_grant" ||
+            reason.errorCode === "monitor_window_timeout" ||
+            reason.errorCode === "authority_mismatch" ||
             reason.errorCode === "interaction_required"
           ) {
             localStorage.removeItem("auth_token");
             instance.logoutPopup();
+          }
+          else{
+            console.log(reason.errorCode);
           }
 
           return new FetchError(
